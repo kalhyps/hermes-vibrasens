@@ -1,0 +1,167 @@
+# Artémis Vibrasens, profil default : l'orchestrateur, seul à parler au dirigeant (Google Chat), qui
+# constitue le dossier client, fait valider le brief, crée les tâches Kanban et
+# rédige les bilans. Son gateway répartit aussi les tâches Kanban entre les trois
+# autres profils (data/profiles/collecteur, enrichisseur, qualificateur).
+# Copie d'Artémis au 24/10/2026, pour l'entreprise du père de Nicolas : mêmes outils et
+# mêmes skills, son propre dossier, ses propres clés, ses propres données.
+model:
+  default: gpt-6-sol
+  provider: openai-codex
+  base_url: https://chatgpt.com/backend-api/codex
+agent:
+  # Valeur par défaut de Hermes : une campagne enchaîne beaucoup d'appels d'outils.
+  max_turns: 500
+  disabled_toolsets:
+    - bfl
+    - code_execution
+    - computer_use
+    # Ajouté d'office par Hermes v0.22 : peut brancher des services et installer
+    # des serveurs d'outils, sans usage ici.
+    - connections
+    - context_engine
+    - discord
+    - discord_admin
+    - homeassistant
+    - image_gen
+    - spotify
+    - stt
+    - tts
+    - video
+    - video_gen
+    - x_search
+    - yuanbao
+terminal:
+  backend: local
+  cwd: /workspace
+  home_mode: profile
+browser:
+  # 'off' = navigateur local (Chromium de l'image), jamais une adresse privée,
+  # pas d'exécution libre de JavaScript.
+  backend: 'off'
+  cloud_provider: local
+  headed: false
+  engine: chrome
+  use_gateway: false
+  use_real_profile: false
+  allow_private_urls: false
+  restrict_evaluate: true
+web:
+  # Routeur maison (plugins/web/routeur), même code et même ordre qu'Axiom.
+  search_backend: routeur
+  extract_backend: routeur
+  keyless_fallback: false
+  keyless_rescue: false
+compression:
+  enabled: true
+  threshold: 0.5
+memory:
+  # Préférences courtes seulement ; le contexte du client vit dans /workspace/client/.
+  memory_enabled: true
+  user_profile_enabled: true
+  write_approval: false
+  memory_char_limit: 2200
+  user_char_limit: 2500
+onboarding:
+  # Pas de proposition de « profil utilisateur » au premier message.
+  profile_build: 'off'
+stt:
+  enabled: false
+curator:
+  # Les skills sont fournies avec l'agent et ne bougent que par le dépôt.
+  enabled: false
+timezone: Europe/Paris
+approvals:
+  destructive_slash_confirm: false
+  mode: manual
+  # Les tâches Kanban tournent sans humain : ce qui demanderait une validation est refusé.
+  single_query_mode: deny
+  unattended_mode: deny
+  deny:
+    - '*/.env*'
+    - '*auth.json*'
+    - '*PERPLEXITY_API_KEY*'
+    - '*FIRECRAWL_API_KEY*'
+    - '*TINYFISH_API_KEY*'
+    - '*KEENABLE_API_KEY*'
+    - '*SERPER_API_KEY*'
+    - '*DROPCONTACT_API_KEY*'
+    - '*COMPANIES_HOUSE_API_KEY*'
+    # Clé du compte de service Google Chat, client OAuth et jetons des pièces jointes.
+    - '*google-chat*'
+    - '*google_chat_user*'
+security:
+  redact_secrets: true
+  # Hermes v0.22 réactive par défaut les installations à la demande, qui
+  # remplaceraient les paquets de l'image.
+  allow_lazy_installs: false
+updates:
+  pre_update_backup: full
+  backup_keep: 5
+_config_version: 50
+platform_toolsets:
+  cli:
+    - browser
+    - clarify
+    - file
+    - kanban
+    - memory
+    - session_search
+    - skills
+    - terminal
+    - todo
+    - web
+  google_chat:
+    - browser
+    - clarify
+    - file
+    - kanban
+    - memory
+    - session_search
+    - skills
+    - terminal
+    - todo
+    - web
+group_sessions_per_user: true
+thread_sessions_per_user: false
+plugins:
+  enabled:
+    - web/routeur
+gateway:
+  # Seuls les fichiers des campagnes peuvent partir en pièce jointe : une consigne
+  # piégée lue sur un site ne doit pas faire sortir un autre fichier.
+  strict: true
+  media_delivery_allow_dirs:
+    - /workspace/campagnes
+  # Écrit par Hermes lui-même au démarrage dès qu'il y a d'autres profils ; sans
+  # profile_routes, tous les messages vont au profil default (l'orchestrateur).
+  multiplex_profiles: true
+  platforms:
+    discord:
+      enabled: false
+    google_chat:
+      # Projet, abonnement Pub/Sub, clé du compte de service et adresse du dirigeant
+      # (seul autorisé) dans data/.env : en mode multi-profils, Hermes ne lit pas les
+      # réglages des plateformes dans l'environnement du conteneur.
+      enabled: true
+      # Message posté pendant que l'agent travaille, puis remplacé par sa réponse.
+      typing_status_text: "Je regarde…"
+kanban:
+  # Ni découpage automatique des tâches, ni relecture automatique.
+  auto_decompose: false
+  review_dispatch: false
+display:
+  language: fr
+  # Seulement les réponses, ni le détail des outils ni les commentaires entre deux
+  # outils (comme Artémis).
+  tool_progress: "off"
+  interim_assistant_messages: false
+  show_reasoning: false
+skills:
+  # Skills de l'équipe dans data/skills (orchestrateur) et data/profiles/<profil>/skills :
+  # les agents n'en écrivent pas ; une méthode à améliorer se corrige dans le dépôt.
+  write_approval: true
+  creation_nudge_interval: 0
+  inline_shell: false
+  project_discovery: false
+  external_dirs: []
+  auto_load: []

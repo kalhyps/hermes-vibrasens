@@ -1,0 +1,114 @@
+# Artémis Vibrasens, profil qualificateur : note chaque entreprise critère par critère, avec citations et adresses ; qualifié, à revoir ou écarté
+# Il ne parle à personne : il travaille sur les tâches Kanban que l'orchestrateur
+# (profil default) lui confie, sans humain. Réglages repris de ./configurer-profils
+# de l'ancien leadgen (kalhyps/hermes-leadgen, 589f3cd).
+model:
+  default: gpt-6-sol
+  provider: openai-codex
+  base_url: https://chatgpt.com/backend-api/codex
+agent:
+  max_turns: 500
+  disabled_toolsets:
+    - bfl
+    - code_execution
+    - computer_use
+    - connections
+    - context_engine
+    - discord
+    - discord_admin
+    - homeassistant
+    - image_gen
+    - spotify
+    - stt
+    - tts
+    - video
+    - video_gen
+    - x_search
+    - yuanbao
+terminal:
+  backend: local
+  cwd: /workspace
+  home_mode: profile
+  # Délai maximal d'une commande ; les outils longs s'arrêtent d'eux-mêmes avant.
+  timeout: 600
+  # Clés des sources transmises aux outils que l'agent lance (vides tant que Nicolas ne les ajoute pas).
+  env_passthrough:
+    - LEADGEN_FIRECRAWL_API_KEY
+    - COMPANIES_HOUSE_API_KEY
+    - SEARCH_PROVIDER
+    - SERPER_API_KEY
+    - DROPCONTACT_API_KEY
+    - LINKEDIN_SEEN_FILE
+browser:
+  backend: 'off'
+  cloud_provider: local
+  headed: false
+  engine: chrome
+  use_gateway: false
+  use_real_profile: false
+  allow_private_urls: false
+  restrict_evaluate: true
+web:
+  search_backend: routeur
+  extract_backend: routeur
+  keyless_fallback: false
+  keyless_rescue: false
+compression:
+  enabled: true
+  threshold: 0.5
+onboarding:
+  profile_build: 'off'
+stt:
+  enabled: false
+curator:
+  enabled: false
+timezone: Europe/Paris
+approvals:
+  destructive_slash_confirm: false
+  mode: manual
+  single_query_mode: deny
+  unattended_mode: deny
+  deny:
+    - '*/.env*'
+    - '*auth.json*'
+    - '*PERPLEXITY_API_KEY*'
+    - '*FIRECRAWL_API_KEY*'
+    - '*TINYFISH_API_KEY*'
+    - '*KEENABLE_API_KEY*'
+    - '*SERPER_API_KEY*'
+    - '*DROPCONTACT_API_KEY*'
+    - '*COMPANIES_HOUSE_API_KEY*'
+    - '*google-chat*'
+    - '*google_chat_user*'
+security:
+  redact_secrets: true
+  allow_lazy_installs: false
+updates:
+  pre_update_backup: full
+  backup_keep: 5
+_config_version: 50
+platform_toolsets:
+  cli: [file, kanban, skills, terminal, todo, web]
+plugins:
+  enabled:
+    - web/routeur
+gateway:
+  platforms:
+    discord:
+      enabled: false
+    # Seul l'orchestrateur parle au dirigeant.
+    google_chat:
+      enabled: false
+kanban:
+  auto_decompose: false
+  review_dispatch: false
+display:
+  language: fr
+skills:
+  write_approval: true
+  creation_nudge_interval: 0
+  inline_shell: false
+  project_discovery: false
+  external_dirs: []
+  # Skill de travail chargée d'office dans chaque session.
+  auto_load: [qualification-leads]

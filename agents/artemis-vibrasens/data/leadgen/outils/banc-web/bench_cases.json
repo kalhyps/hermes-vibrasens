@@ -1,0 +1,41 @@
+{
+  "_comment": "Cas de test du banc web pour la prospection. queries: expected_domains = domaines attendus (suffixe) dans le top 3 ; vide = jugé par recouvrement de mots. urls: expect = chaînes qui doivent apparaître dans le texte lu (insensible à la casse et aux accents) ; hard = page connue pour bloquer les robots. À compléter avec des recherches tirées des campagnes réelles (sites de PME, annuaires, fédérations) ; une URL morte est un résultat du banc, pas une erreur du script.",
+  "version": 1,
+  "queries": [
+    {"id": "q01", "cat": "registre", "q": "fiche entreprise SIREN annuaire des entreprises", "expected_domains": ["annuaire-entreprises.data.gouv.fr", "entreprises.gouv.fr", "service-public.fr"]},
+    {"id": "q02", "cat": "registre", "q": "API recherche d'entreprises documentation recherche-entreprises.api.gouv.fr", "expected_domains": ["api.gouv.fr", "data.gouv.fr"]},
+    {"id": "q03", "cat": "registre", "q": "base SIRENE téléchargement fichier stock établissements", "expected_domains": ["data.gouv.fr", "insee.fr"]},
+    {"id": "q04", "cat": "registre", "q": "BODACC annonces procédures collectives recherche", "expected_domains": ["bodacc.fr", "data.gouv.fr"]},
+    {"id": "q05", "cat": "registre", "q": "Companies House search for a company by name", "expected_domains": ["company-information.service.gov.uk", "gov.uk"]},
+    {"id": "q06", "cat": "registre", "q": "Banque-Carrefour des Entreprises recherche entreprise Belgique", "expected_domains": ["economie.fgov.be", "kbopub.economie.fgov.be"]},
+    {"id": "q07", "cat": "registre", "q": "Handelsregister Unternehmen suchen Deutschland", "expected_domains": ["handelsregister.de", "unternehmensregister.de"]},
+    {"id": "q08", "cat": "registre", "q": "Pappers fiche entreprise dirigeants comptes", "expected_domains": ["pappers.fr"]},
+    {"id": "q09", "cat": "activite", "q": "code NAF 22.29A fabrication de pièces techniques à base de matières plastiques", "expected_domains": ["insee.fr", "entreprises.gouv.fr", "annuaire-entreprises.data.gouv.fr"]},
+    {"id": "q10", "cat": "activite", "q": "convention collective plasturgie IDCC texte", "expected_domains": ["legifrance.gouv.fr", "service-public.fr", "laplasturgie.fr"]},
+    {"id": "q11", "cat": "federation", "q": "fédération française de la plasturgie annuaire des adhérents", "expected_domains": ["laplasturgie.fr", "polyvia.fr"]},
+    {"id": "q12", "cat": "federation", "q": "syndicat national du décolletage Haute-Savoie entreprises", "expected_domains": ["sndec.com", "decolletage.fr"]},
+    {"id": "q13", "cat": "salon", "q": "Global Industrie 2026 liste des exposants", "expected_domains": ["global-industrie.com"]},
+    {"id": "q14", "cat": "site", "q": "Renault Trucks site officiel", "expected_domains": ["renault-trucks.com", "renault-trucks.fr"]},
+    {"id": "q15", "cat": "site", "q": "Michelin site officiel Clermont-Ferrand", "expected_domains": ["michelin.com", "michelin.fr"]},
+    {"id": "q16", "cat": "site", "q": "Schneider Electric France contact", "expected_domains": ["se.com"]},
+    {"id": "q17", "cat": "donnees", "q": "Overture Maps places data download", "expected_domains": ["overturemaps.org"]},
+    {"id": "q18", "cat": "donnees", "q": "OSHA ITA injury tracking establishment data download", "expected_domains": ["osha.gov"]},
+    {"id": "q19", "cat": "donnees", "q": "OpenCorporates search companies", "expected_domains": ["opencorporates.com"]},
+    {"id": "q20", "cat": "presse", "q": "usine plasturgie investissement nouvelle presse à injection 2026", "expected_domains": []}
+  ],
+  "urls": [
+    {"id": "u01", "cat": "sanity", "url": "https://example.com/", "expect": ["Example Domain"]},
+    {"id": "u02", "cat": "registre", "url": "https://recherche-entreprises.api.gouv.fr/search?q=renault&per_page=1", "expect": ["siren"]},
+    {"id": "u03", "cat": "registre", "url": "https://annuaire-entreprises.data.gouv.fr/", "expect": ["entreprise"]},
+    {"id": "u04", "cat": "registre", "url": "https://www.bodacc.fr/", "expect": ["BODACC"]},
+    {"id": "u05", "cat": "registre", "url": "https://find-and-update.company-information.service.gov.uk/", "expect": ["Companies House"]},
+    {"id": "u06", "cat": "registre", "url": "https://www.pappers.fr/", "expect": ["Pappers"]},
+    {"id": "u07", "cat": "registre", "url": "https://www.societe.com/", "expect": ["societe"], "hard": true},
+    {"id": "u08", "cat": "activite", "url": "https://www.insee.fr/fr/metadonnees/nafr2/sousClasse/22.29A", "expect": ["plastiques"]},
+    {"id": "u09", "cat": "federation", "url": "https://www.laplasturgie.fr/", "expect": ["plasturgie"]},
+    {"id": "u10", "cat": "site", "url": "https://www.renault-trucks.com/", "expect": ["Renault Trucks"]},
+    {"id": "u11", "cat": "site", "url": "https://www.michelin.com/", "expect": ["Michelin"]},
+    {"id": "u12", "cat": "donnees", "url": "https://docs.overturemaps.org/", "expect": ["Overture"]},
+    {"id": "u13", "cat": "officiel", "url": "https://www.legifrance.gouv.fr/", "expect": ["Légifrance"], "hard": true}
+  ]
+}

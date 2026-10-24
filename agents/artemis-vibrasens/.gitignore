@@ -1,0 +1,110 @@
+# Ce que garde l'historique d'Artémis Vibrasens, dans le dépôt (version de départ) et
+# dans son dossier de travail sur le serveur (/srv/hermes/clients/vibrasens/agents/artemis-vibrasens/,
+# dépôt git local enregistré chaque nuit par hermes-ctl) : configuration,
+# procédures, mémoire. Jamais les identifiants, les bases, les sessions
+# ni l'état d'exécution de Hermes.
+
+# junk / runtime
+__pycache__/
+*.py[cod]
+node_modules/
+venv/
+.venv/
+venvs/
+.DS_Store
+*.swp
+*.bak
+**/.skills_prompt_snapshot.json
+**/.usage.json
+**/.usage.json.lock
+**/.bundled_manifest
+**/.curator_ledger.jsonl
+**/.curator_state
+**/.hub/
+**/.curator_backups/
+**/.pytest_cache/
+
+# ---------------------------------------------------------------------------
+# /data (= /opt/data dans le conteneur) : état Hermes. On ne garde que la config.
+# ---------------------------------------------------------------------------
+/data/*
+!/data/SOUL.md
+!/data/config.yaml
+!/data/profile.yaml
+!/data/.env.example
+!/data/.no-bundled-skills
+!/data/plugins/
+!/data/skills/
+!/data/hooks/
+!/data/cron/
+!/data/memories/
+!/data/scripts/
+!/data/tests/
+!/data/bin/
+
+# jobs.json est réécrit par Hermes à chaque exécution (dernier passage, pause…) :
+# le suivre faisait échouer les déploiements et a déjà annulé une pause demandée
+# par Nico. Le fichier reste sur le serveur, hors de l'historique.
+/data/cron/*
+
+/data/hooks/*
+!/data/hooks/**/*.py
+!/data/hooks/**/*.sh
+!/data/hooks/**/*.json
+
+/data/memories/*
+!/data/memories/USER.md
+!/data/memories/MEMORY.md
+
+/data/bin/*
+!/data/bin/*.py
+!/data/bin/*.json
+
+
+# Artémis Vibrasens est une équipe de quatre profils Hermes dans un conteneur :
+# l'orchestrateur est le profil default (/data), les trois autres vivent dans
+# /data/profiles/<profil>/. On garde leur config, leur fiche et leurs skills.
+!/data/profiles/
+/data/profiles/*/*
+!/data/profiles/*/SOUL.md
+!/data/profiles/*/config.yaml
+!/data/profiles/*/profile.yaml
+!/data/profiles/*/.no-bundled-skills
+!/data/profiles/*/skills/
+!/data/profiles/*/plugins/
+# Skill d'aide sur Hermes que Hermes remet lui-même dans chaque profil.
+**/skills/autonomous-ai-agents/
+# Outils Python des agents et documentation (catalogue des sources).
+!/data/leadgen/
+
+
+# ---------------------------------------------------------------------------
+# /workspace : client, campagnes et connecteurs écrits par le collecteur. Seule
+# la note de contexte est gardée ; les données métier restent sur le serveur.
+# ---------------------------------------------------------------------------
+/workspace/*
+!/workspace/.hermes.md
+
+
+# ---------------------------------------------------------------------------
+# Identifiants : jamais, même dans un dossier gardé ci-dessus.
+# ---------------------------------------------------------------------------
+.env
+.env.*
+*.env
+!.env.example
+auth.json
+auth.lock
+auth.yml
+*token*.json
+*client_secret*
+*service_account*.json
+*service-account*.json
+*credentials*.json
+*.pem
+*.key
+**/mcp-tokens/
+**/.config/
+**/*.db
+**/*.db-*
+**/*.sqlite*

@@ -1,0 +1,7 @@
+name: web-routeur
+version: 0.1.0
+description: "Routeur web Kalhyps : web_search et web_extract passent par une chaîne de fournisseurs, gratuits d'abord, payant en dernier, avec budgets par jour et une ligne de journal par appel."
+author: Kalhyps
+kind: backend
+provides_web_providers:
+  - routeur

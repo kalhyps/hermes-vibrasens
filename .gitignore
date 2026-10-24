@@ -1,0 +1,22 @@
+# Le dépôt ne contient que la configuration : les dossiers de travail des
+# agents vivent sur le serveur, hors du dépôt (/srv/hermes/clients/vibrasens/agents/<agent>/),
+# avec leurs clés dans les .env de leurs profils. Chaque agent a son propre .gitignore
+# (agents/<agent>/.gitignore), qui sert aussi à son historique sur le serveur.
+
+# secrets et environnements locaux
+.env
+.env.*
+*.env
+!*.env.example
+hermes.env
+auth.json
+*.bak
+
+# junk
+__pycache__/
+*.py[cod]
+node_modules/
+venv/
+.venv/
+.DS_Store
+*.swp

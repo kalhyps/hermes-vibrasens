@@ -1,0 +1,39 @@
+# Agents Hermes de Vibrasens, l'entreprise du père de Nicolas, sur le serveur de Kalhyps.
+# Un conteneur par agent, qui ne voit que son dossier de travail
+# (/srv/hermes/clients/vibrasens/agents/<agent>/) : aucun accès aux agents de Nicolas
+# ni à leurs clés. Les clés sont dans les .env des profils de chaque agent, jamais ici.
+#
+# Lancé uniquement par le menu du serveur (« hermes-ctl deployer-client vibrasens »),
+# sous le compte hermes (Docker sans root), depuis /srv/hermes/clients/vibrasens/depot.
+# Image commune hermes-kalhyps:v0.22.2, construite par le dépôt kalhyps/hermes : jamais
+# construite ni téléchargée ici.
+name: vibrasens
+
+x-agent: &agent
+  image: hermes-kalhyps:v0.22.2
+  pull_policy: never
+  restart: unless-stopped
+  command: gateway run
+  shm_size: "1gb"
+
+x-environnement: &environnement
+  HERMES_WRITE_SAFE_ROOT: "/opt/data:/workspace"
+  # Hermes tourne sous l'UID 0 du conteneur (= hermes sur le serveur) : on l'autorise.
+  HERMES_ALLOW_ROOT_GATEWAY: "1"
+
+services:
+  # Artémis Vibrasens : prospection B2B, copie d'Artémis (l'agent de prospection de
+  # Nicolas) au 24/10/2026, sur le Google Chat du dirigeant (messages reçus par un
+  # abonnement Pub/Sub, aucun port ouvert). Équipe de quatre profils : orchestrateur
+  # (default), collecteur, enrichisseur, qualificateur, reliés par le Kanban.
+  artemis-vibrasens:
+    <<: *agent
+    environment:
+      <<: *environnement
+      SEARCH_PROVIDER: serper
+      LINKEDIN_SEEN_FILE: /workspace/connecteurs/linkedin_seen.json
+    mem_limit: 4g
+    cpus: 2
+    volumes:
+      - /srv/hermes/clients/vibrasens/agents/artemis-vibrasens/data:/opt/data
+      - /srv/hermes/clients/vibrasens/agents/artemis-vibrasens/workspace:/workspace
