@@ -89,6 +89,15 @@ approvals:
     # Clé du compte de service Google Chat, client OAuth et jetons des pièces jointes.
     - '*google-chat*'
     - '*google_chat_user*'
+# Aucune demande de validation dans Google Chat (choix de Nicolas, 24/10) : les
+# scripts de l'équipe (Python en -c, heredoc, execute_code) tournent d'office, comme
+# chez Axiom. Les clés restent protégées par approvals.deny ci-dessus et redact_secrets.
+command_allowlist:
+  - command parser limit or malformed executable payload
+  - script execution via heredoc
+  - script execution via -e/-c flag
+  - execute_code
+  - shell command via -c/-lc flag
 security:
   redact_secrets: true
   # Hermes v0.22 réactive par défaut les installations à la demande, qui
